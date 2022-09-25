@@ -1,0 +1,38 @@
+#! /usr/bin/env node
+
+const program = require("commander");
+const chalk = require("chalk");
+
+// 获取当前版本号
+const version = require("../package.json").version;
+
+// 获取create模块
+const createModel = require("../lib/create");
+
+program
+  // 脚手架名称
+  .name("celerity-cli")
+  // 命令格式
+  .usage(`<command> [option]`)
+  // 版本号
+  .version(version);
+
+program.on("--help", () => {
+  console.log(
+    `Run ${chalk.cyan(
+      "temeplate <command> --help"
+    )} for detailed usage of given command.
+    `
+  );
+});
+
+program
+  .command("create <project-name>")
+  .description("create a new project")
+  .option("-f, --force", "overwrite target directory if it exists")
+  .action((projectName, options) => {
+    // 引入create模块，并传入参数
+    createModel(projectName, options);
+  });
+
+program.parse(process.argv);
